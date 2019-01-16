@@ -34,4 +34,26 @@ $temporary = array(
     )
 );
 
+// Läs av GET-parametern
+$slug = filter_input(INPUT_GET, 'slug', FILTER_SANITIZE_URL);
 
+// Provisorisk angivelse av teckenkodning under tiden vi testar
+header("Content-type: text/html; charset=utf-8");
+
+if (empty($slug) ) {
+	// Ingen enskild skida är vald
+	// Preliminär test-kod skriver ut alla inläggs rubriker här
+	echo "<h1>De senaste inläggen</h1>";
+	foreach ( $temporary as $slug => $blogpost) {
+		echo "<h2><a
+href='blog.php?slug={$slug}'>{$blogpost['title']}</h2>\n";
+	}
+} elseif ( array_key_exists($slug, $temporary) ) {
+	// Ett befintligt inlägg har valts, visa det
+	// Preliminär test-kod visar bara inläggets titel
+	echo "<h1>{$temporary[$slug]['title']}</h1>\n";
+} else {
+	// Ett ogiltigt val har gjorts
+	header("HTTP/1.0 404 Not Found");
+	echo "<h1>Den sökta sidan finns inte</h1>";
+}	
